@@ -1,0 +1,135 @@
+<!-- Interactive Map -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#FBF9F2">
+    <title>GUIO - Map</title>
+    <link rel="icon" type="image/png" href="assets/guio_logo.png">
+    <link rel="stylesheet" href="css/index.css?v=no-xp-rewards-1">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="api/leaflet/leaflet-css/leaflet.css">
+
+</head>
+<body>
+    <!-- ===== TOP NAV ===== -->
+    <header id="top-nav">
+        <h1 class="brand">
+            <a href="index.html">
+                <span class="logo">
+                    <img class="logo-icon" src="assets/guio_logo.png" alt="GUIO logo">
+                </span>GUIO
+            </a>
+        </h1>
+        <nav id="main-nav" aria-label="Main">
+            <ul>
+                <li><a href="index.html" aria-current="page">Map</a></li>
+                <li><a href="html/quests.html">Quests</a></li>
+                <li><a href="html/profile.html">Profile</a></li>
+            </ul>
+        </nav>
+        <div class="header-stats" id="player-status">
+            <div class="avatar" id="player-avatar" role="img" aria-label="Profile">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 20c.4-3.4 2.8-5.3 6.5-5.3s6.1 1.9 6.5 5.3"/></svg>
+            </div>
+        </div>
+    </header>
+
+    <main class="home-container">
+        <!-- Current quest and its next stop -->
+        <aside class="sidebar">
+            <section class="current-quest-box" aria-labelledby="current-quest-heading">
+                <div class="current-quest-header">
+                    <h2 id="current-quest-heading">Current quest</h2>
+                </div>
+                <div id="sidebar-quest-card-container" aria-live="polite">
+                    <p class="current-quest-loading" role="status">Loading your current quest...</p>
+                </div>
+            </section>
+
+            <section class="next-location-section" aria-labelledby="next-location-heading">
+                <h2 id="next-location-heading">Next location</h2>
+                <div id="next-location-container" aria-live="polite">
+                    <p class="current-quest-loading" role="status">Finding your next stop...</p>
+                </div>
+            </section>
+        </aside>
+
+        <!-- Site Details Slide-Out Drawer -->
+        <div id="site-details-drawer" class="site-drawer">
+            <div class="drawer-header">
+                <div class="drawer-chips" id="drawer-chips">
+                    <!-- Dynamically populated chips -->
+                </div>
+                <button id="drawer-close-btn" class="drawer-close-btn" onclick="closeSiteDrawer()" aria-label="Close panel">&times;</button>
+            </div>
+
+            <div class="drawer-content">
+                <div class="drawer-img" id="drawer-img"></div>
+                
+                <h2 class="drawer-title" id="drawer-title">Site Title</h2>
+                <p class="drawer-sub" id="drawer-sub">300 m away · Open today 8:00–17:00 · Free entry</p>
+                <p class="drawer-desc" id="drawer-desc">Description goes here...</p>
+
+                <!-- Quest / Trail Box -->
+                <div class="drawer-card trail-card">
+                    <span class="card-icon-box">🚩</span>
+                    <div class="card-text">
+                        <strong>Part of Hidden Gems Trail</strong>
+                        <span id="drawer-trail-stop">stop 4 of 5</span>
+                    </div>
+                </div>
+
+                <!-- Check-in Reward Box -->
+                <div class="drawer-card reward-card">
+                    <span class="card-icon-box">🏆</span>
+                    <div class="card-text">
+                        <strong>Check-in reward</strong>
+                        <span id="drawer-reward-text">Stamp: Salt Keeper</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="drawer-footer">
+                <a id="drawer-checkin-btn" class="drawer-btn-primary" href="html/camera.html">Check in here</a>
+            </div>
+        </div>
+
+        <!-- Quest Details Modal -->
+        <div id="quest-modal-overlay" class="modal-overlay" hidden>
+            <div class="quest-modal">
+                <div class="quest-modal-header">
+                    <h2 class="quest-modal-title">Your Active Quests</h2>
+                    <button id="quest-modal-close" class="drawer-close-btn" aria-label="Close modal">&times;</button>
+                </div>
+
+                <div id="quest-modal-list" class="quest-modal-body">
+                    <!-- Dynamic list of quests rendered via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Map View Container -->
+        <section class="map-view">
+            <div id="map"></div>
+            <a class="map-camera-shortcut" id="map-camera-shortcut" href="html/camera.html" aria-label="Open camera">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M4 7.5h3l1.5-2h7l1.5 2h3a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 20 19.5H4A1.5 1.5 0 0 1 2.5 18V9A1.5 1.5 0 0 1 4 7.5Z" />
+                    <circle cx="12" cy="13" r="3.5" />
+                </svg>
+            </a>
+        </section>
+
+    </main>
+
+    <!-- Leaflet JavaScript Library -->
+     <script src="api/leaflet/leaflet-js/leaflet.js"></script>
+    
+    <!-- Shared account context, then the extracted map API and map UI. -->
+    <script src="js/account-context.js?v=1"></script>
+    <script src="js/map-api.js?v=anonymous-device-1"></script>
+    <script src="js/index.js?v=no-xp-rewards-1"></script>
+</body>
+</html>

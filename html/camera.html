@@ -1,0 +1,173 @@
+<!-- Camera -->
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GUIO — Camera</title>
+  <meta name="theme-color" content="#FBF9F2">
+  <link rel="icon" type="image/png" href="../assets/guio_logo.png"> <!-- Logo for browser tab -->
+  <link rel="stylesheet" href="../css/camera.css?v=no-level-xp-1">
+  <script src="../js/profile.js?v=15" defer></script>
+  <script src="../js/camera.js?v=no-level-xp-1" defer></script>
+</head>
+
+<body>
+
+  <!-- Navigation bar -->
+  <header id="top-nav">
+    <h1 class="brand">
+      <a href="../index.html">
+        <span class="logo">
+          <img class="logo-icon" src="../assets/guio_logo.png" alt="GUIO logo"></span>GUIO
+      </a>
+    </h1>
+    <nav id="main-nav" aria-label="Main">
+      <ul>
+        <li><a href="../index.html">Map</a></li>
+        <li><a href="quests.html">Quests</a></li>
+        <li><a href="profile.html">Profile</a></li>
+      </ul>
+    </nav>
+    <div class="header-stats" id="player-status">
+      <div class="avatar" id="player-avatar" role="img" aria-label="Profile">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 20c.4-3.4 2.8-5.3 6.5-5.3s6.1 1.9 6.5 5.3"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content of camera webpage -->
+  <main class="main">
+    <section class="camera-panel">
+      <video class="camera-feed" id="camera-feed" autoplay playsinline muted></video>
+      <img class="captured-photo" id="captured-photo" alt="Captured check-in photo" hidden>
+      <div class="gps-badge" id="gps-badge" hidden>
+        <img class="gps-icon" src="../assets/pin.png" alt="">
+        <span id="gps-badge-text">Locating you…</span>
+      </div>
+
+      <a class="camera-exit" href="../index.html" aria-label="Exit camera and return to map">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="m14.5 5-7 7 7 7M8 12h12" />
+        </svg>
+        <span>Exit</span>
+      </a>
+
+      <div class="camera-modes" role="group" aria-label="Camera mode">
+        <button class="camera-mode is-active" id="photo-mode" type="button" aria-pressed="true">Photo</button>
+        <button class="camera-mode" id="qr-mode" type="button" aria-pressed="false">Scan QR</button>
+      </div>
+
+      <!-- Border design for camera -->
+      <div class="camera">
+        <i class="corner tl"></i>
+        <i class="corner tr"></i>
+        <i class="corner bl"></i>
+        <i class="corner br"></i>
+        <div class="preview-caption" id="preview-caption">Requesting camera access…</div>
+        <button class="camera-retry" id="camera-retry" type="button" hidden>Allow camera access</button>
+        <button class="verify-retry" id="verify-retry" type="button" hidden>Retry verification</button>
+      </div>
+      <div class="qr-result" id="qr-result" hidden aria-live="polite">
+        <p id="qr-result-text"></p>
+        <button id="qr-rescan" type="button" hidden>Scan again</button>
+      </div>
+      
+      <!-- Dock for camera shutter, flash, and gallery -->
+      <div class="camera-dock">
+        <div class="shutter-wrap">
+          <button class="shutter" id="capture-button" type="button" aria-label="Take photo"></button>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Sidebar contents -->
+    <aside class="sidebar">
+      <section class="site-card">
+        <span class="site-thumb">
+          <img class="site-icon" src="../assets/pin.png" alt="">
+        </span>
+        <!-- Nearest site card -->
+        <div class="site-info">
+          <span class="range-tag" id="range-tag">Finding your nearest spot…</span>
+          <h1 id="site-name">Finding nearest spot…</h1>
+          <p id="site-type">Waiting for your location.</p>
+        </div>
+      </section>
+      <!-- Check-in steps card -->
+      <section class="steps-card">
+        <h2>Check-in steps</h2>
+        <div class="step current" id="step-photo">
+          <span class="step-indicator">1</span>
+          <span>Take a photo of the site</span>
+        </div>
+        <div class="step pending" id="step-proof">
+          <span class="step-indicator">2</span>
+          <span>Verify the location on the map</span>
+        </div>
+        <div class="step pending" id="step-verify">
+          <span class="step-indicator">3</span>
+          <span>Earn your stamp</span>
+        </div>
+        <button class="earn-stamp-button" id="earn-stamp-button" type="button" hidden>Earn stamp</button>
+      </section>
+      <!-- Check-in stamp reward -->
+      <section class="reward-card">
+        <img class="reward-icon" src="../assets/Group.png" alt="">
+        <div>
+          <strong id="reward-title">Stamp: Salt Keeper</strong>
+          <p id="reward-description">Complete your check-in to earn this site’s stamp.</p>
+        </div>
+      </section>
+      <!-- List of recent check-ins card -->
+      <section class="recent-card">
+        <h2>Recent check-ins</h2>
+        <div id="recent-checkins-list">
+          <p class="recent-empty">No verified check-ins yet.</p>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <!-- Pop up dialog after taking a picture -->
+  <dialog class="checkin-dialog" id="checkin-dialog">
+    <div class="checkin-dialog-content">
+      <button class="dialog-close" id="close-checkin-dialog" type="button">×</button>
+      <img class="reward-icon" src="../assets/Group.png" alt="">
+      <h2 id="checkin-dialog-title">Check-in complete!</h2>
+      <!-- Details about the site where the user checked in -->
+      <p class="completion-site">
+        <span id="completion-site-label" hidden>Spot</span>
+        <span id="completion-site"></span>
+        <span id="completion-site-separator"> · </span>
+        <span id="verification-status" class="verification-status">Verified by GPS</span>
+      </p>
+      <p id="completion-verification">GPS matched a registered tourist spot</p>
+      <div class="completion-rewards">
+        <span>
+          <span id="completion-stamp-label">Stamp earned</span>
+          <span id="completion-stamp"></span>
+        </span>
+      </div>
+      <!-- Display current quest -->
+      <div class="completion-quest" id="completion-quest">
+        <img src="../assets/Group.png" alt="">
+        <span>Hidden Gems Trail: — / — sites</span>
+      </div>
+      <!-- Distance from exact site (shown when site is verified; hidden when site is unverified) -->
+      <div id="completion-distance-row" hidden>
+        <span>Distance</span>
+        <span id="completion-distance"></span>
+      </div>
+      <!-- Two buttons at the bottom of the pop up -->
+      <div class="dialog-actions">
+        <button class="dialog-done" id="done-checkin-dialog" type="button">Keep exploring</button>
+        <a class="view-passport" href="profile.html">View my profile</a>
+      </div>
+    </div>
+  </dialog>
+
+</body>
+</html>
